@@ -70,3 +70,38 @@ Van a haber videos públicos y privados, es decir:
 - Se relaciona con la tabla VIDEOS (ya descrita).
 - Contiene la información propia del autor necesaria para cumplir con las necesidades del 9º punto. 
 
+## DESAFÍO
+
+ - 1º Podemos tener usuarios subscriptores y usuarios que compren cursos concretos.
+ - 2º Podríamos añadir una nube de tags en cada curso o video que permitierá hacer busquedas rápidas.
+ - 3º Conocer el progreso de un alumno en los cursos que está realizando.
+ - 4º Queremos mostrar al usuario cuantas visualizaciones ha tenido un video, no hace falta que este dato este en tiempo real calculado.
+ - 5º Queremos mostrar al usuario cuantas visualizaciones han tenido todos los videos de un curso, no hace falta que este dato este en tiempo real calculado.
+
+ # Diagrama propuesto
+
+ <img src="desafio.png">
+
+ ## Desarrollo
+
+ ### Se añade la tabla USERS
+ - Tiene su campo ID como clave primaria.
+ - Tiene campos propios para los datos de los usuarios como nombre e email.
+ - Tiene un campo de tipo boolean para saber si es subscriptor para cumplir con el 1º punto.
+ - Se relaciona con la tabla COURSES a traves de una tabla intermedia de clave compuesta, ya que un usuario puede tener varios cursos y un curso puede tener varios usuarios, completando el 1º punto. 
+ - En la tabla intermedia se crea un campo, donde se almacena el progreso alcanzado en cada curso por cada alumno, como indica el 3º punto. 
+
+### Se añade la tabla TAGS
+ - Tiene su propio campo ID como clave primaria.
+ - Tiene un campo propio donde guardar su nombre.
+ - Se relaciona con la tabla COURSES de acuerdo con el 2º punto. Se emplea de nuevo una tabla intermedia ya que un curso puede tener varios tags, y un tag servir para varios cursos(se se quisiese hacer lo mismo para los videos, habria que repetir el proceso con otra tabla intermedia.).
+
+### Se añade un campo VIEWS en la tabla VIDEOS
+ - Se añade este campo que se incrementara con cada visualización de acuerdo con el 4º punto. 
+
+### Se añade un campo COURSE_VIEWS en la tabla COURSES
+ - Se añade este campo para cumplir con el 5º, donde se calculan las visualizaciones totales que han tenido todos los videos de un curso de la siguiente manera.
+ 
+  SELECT SUM(VIEWS)
+FROM VIDEOS
+WHERE COURSE_ID = COURSE_ID
